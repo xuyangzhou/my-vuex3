@@ -1,17 +1,57 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h2>vuex3</h2>
+    <h4>root store</h4>
+    <!-- <p>name: {{ name }}</p> -->
+    <div>
+      <span>rootCount: {{ appCount }}</span>
+      <span>doubleCount: {{ doubleCount }}</span>
+      <button @click="increment">+</button>
+      <button @click="incrementAsync">async +</button>
+  
+      <button @click="add">直接修改state</button>
+    </div>
+    <div>
+      <h4>A 模块 store</h4>
+
+      <span>count: {{ count }}</span>
+      <span>A 模块: {{ adCount }}</span>
+      <button @click="aIncrement">A 模块 +</button>
+      <button @click="aIncrementAsync">A 模块异步 +</button>
+      <span>age: {{ age }}</span>
+
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapMutations, mapState, mapActions, mapGetters } from './vuex';
 
 export default {
   name: 'App',
+  computed: {
+    ...mapState({ appCount: 'count', name: 'name', age: 'age' }),
+    // ...mapState(['count']),
+    ...mapState('a', { age: 'age', count: 'count' }),
+    ...mapGetters(['doubleCount']),
+    ...mapGetters(['doubleCount']),
+    ...mapGetters('a', { adCount: 'doubleCount' }),
+  },
+
   components: {
-    HelloWorld
+  },
+  methods: {
+    ...mapMutations(['increment']),
+
+    ...mapMutations('a', { aIncrement: 'increment' }),
+    ...mapActions(['incrementAsync']),
+    ...mapActions('a', { aIncrementAsync: 'incrementAsync' }),
+
+    add() {
+      console.log(111)
+      this.$store.state.count++;
+    }
   }
 }
 </script>
